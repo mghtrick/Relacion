@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta Romántica Interactiva</title>
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courgette', cursive;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: black;
+            color: white;
+            text-align: center;
+        }
+        
+        .container {
+            perspective: 1000px;
+            width: 350px;
+        }
+        
+        .card {
+            width: 350px;
+            height: 550px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(255, 0, 102, 0.4);
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(45deg, #8b0a50, #ff3366);
+        }
+        
+        .card-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            overflow-y: auto;
+        }
+        
+        .card h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .card h3 {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .card h4 {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .glare {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(
+                circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 255, 255, 0) 80%
+            );
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .shape:nth-child(1) {
+            width: 150px;
+            height: 150px;
+            top: -50px;
+            right: -50px;
+        }
+        
+        .shape:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            bottom: 50px;
+            left: -30px;
+        }
+        
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: -20px;
+            right: 60px;
+        }
+        
+        .shine {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.25) 0%,
+                rgba(255, 255, 255, 0) 60%
+            );
+        }
+        
+        /* Animación de flotación */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .container {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Estilos para el SVG del corazón */
+        .heart-container {
+            margin: 10px auto;
+            width: 150px;
+            height: 150px;
+        }
+        
+        svg {
+            animation: bit 1s infinite; 
+            animation-delay: 6s;
+            transition: transform 1s;
+        }
+        
+        #myHeart {
+            stroke: pink;
+            stroke-width: 7px;
+            fill-opacity: 0;
+        }
+        
+        svg path {
+            stroke: rgb(255, 255, 255);
+            stroke-dasharray: 1300;
+            stroke-dashoffset: 0;
+            stroke-width: 3px;
+            fill-opacity: 0;
+            animation: anim 12s linear forwards; 
+        }
+        
+        @keyframes anim {
+            0% {
+                stroke-dashoffset: 1000;
+                fill: rgba(255, 0, 0, 0);
+            }
+            50% {
+                stroke-dashoffset: 0;
+                fill: rgba(255, 0, 0, 0);
+                fill-opacity: 0;
+            }
+            100% {
+                fill: rgba(255, 0, 0, 1);
+                fill-opacity: 1;
+            }
+        }
+        
+        @keyframes bit {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-face">
+                <div class="shapes">
+                    <div class="shape"></div>
+                    <div class="shape"></div>
+                    <div class="shape"></div>
+                </div>
+                <div class="shine"></div>
+                <div class="glare"></div>
+                <div class="card-content">
+                    <h1>mi cielo ❤</h1>
+                    <h2>Mi niña Hermosa❤</h2>
+                    
+                    <div class="heart-container">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="150px" height="150px" viewbox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+                            <path id="myHeart" d="M457.901,146.444C436.495,54.316,301.703,30.921,256,124.192
+                                C210.297,30.921,75.506,54.314,54.099,146.444C19.256,296.402,216.886,364.586,256,447.25
+                                C295.114,364.586,492.744,296.404,457.901,146.444z" />
+                        </svg>
+                    </div>
+                    
+                    <div>
+                        <h3>Con estas simples palabras quiero demostrarte que estoy profundamente enamorado de ti amor</h3>
+                        <h3>Eres la persona que deseo tener para toda mi vida Mari.</h3>
+                        <h3>Entrégame el tiempo que te sobre, y lo gastaré en hacerte la persona más feliz del mundo, salgamos adelante juntos mi vida.</h3>
+                        <h3>Unos ojos que jamas me cansaré de mirar,es q modo mrd son muy preciosos mi vida. unos labios que siempre querre besar y morder, pero lo mejor de todo, un corazón que jamás dejaré de amar.</h3>
+                        <h3>gracias por formar parte de mi vida Te amo y no me cansare de decirtelo mi Preciosura, Mi Bella chica, Mi Bella Dama</h3>
+                        <h4><i>21/04/2025</i></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.querySelector('.card');
+        const container = document.querySelector('.container');
+        const glare = document.querySelector('.glare');
+        
+        // Movimiento 3D
+        container.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
+            
+            // Actualizar variables CSS para el brillo
+            const rect = card.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            glare.style.setProperty('--mouse-x', `${mouseX}px`);
+            glare.style.setProperty('--mouse-y', `${mouseY}px`);
+            glare.style.opacity = '1';
+        });
+        
+        // Regresar a la posición original
+        container.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            glare.style.opacity = '0';
+        });
+        
+        // Efecto al entrar
+        container.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
+            
+            // Pop out effect
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+            }, 100);
+        });
+        
+        // Efecto al hacer clic
+        card.addEventListener('click', () => {
+            card.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                card.style.transform = 'scale(1) rotateY(0deg) rotateX(0deg)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
